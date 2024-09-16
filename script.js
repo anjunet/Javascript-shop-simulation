@@ -1,7 +1,7 @@
-const products = ['Coffee', 'Bagel', 'Donut']
-const prices = [10, 15, 18]
+const products = ['Coffee', 'Bagel', 'Donut'];
+const prices = [10, 15, 18];
 
-// function to display products and their prices
+// Function to display products and their prices
 function displayProductsAndPrices() {
   // Loop for products and prices
   for (let i = 0; i < products.length; i++) {
@@ -14,52 +14,67 @@ displayProductsAndPrices();
 // Function to calculate the total cost
 function calculateTotalCost(selectedProducts) {
   let totalCost = 0;
+  
+  // Loop through the selected products array and calculate total cost
   selectedProducts.forEach((selection) => {
     const { productIndex, quantity } = selection;
+    // Multiply the price by the quantity and add to the total cost
     totalCost += prices[productIndex] * quantity;
   });
+
   return totalCost;
 }
 
-function shop(budget){
-    let selectedProducts = [];
-    let keepShopping = true;
+// Shop function with budget handling
+function shop(budget) {
+  let selectedProducts = [];
+  let keepShopping = true;
 
-  displayProducts();
+  // Display available products and prices
+  displayProductsAndPrices();
 
   while (keepShopping) {
-    if (productIndex < 0 || productIndex >= products.length) {
+    // User input simulation (replace with actual user input in real application)
+    let productIndex = parseInt(prompt("Enter product index (0 for Coffee, 1 for Bagel, 2 for Donut):"));
+    let quantity = parseInt(prompt("Enter quantity:"));
+
+    // Validate product selection
+    if (isNaN(productIndex) || productIndex < 0 || productIndex >= products.length) {
       console.log("Invalid product selection.");
-      continue;
+      continue; // Ask the user again if input is invalid
     }
 
     if (isNaN(quantity) || quantity <= 0) {
       console.log("Invalid quantity.");
-      continue;
+      continue; // Ask the user again if input is invalid
     }
-}
 
-let totalCost = calculateTotalCost(selectedProducts);
+    // Add the valid product and quantity to the selectedProducts array
+    selectedProducts.push({ productIndex, quantity });
 
+    // Ask the user if they want to keep shopping
+    let continueShopping = prompt("Do you want to continue shopping? (yes/no)");
+    if (continueShopping.toLowerCase() !== 'yes') {
+      keepShopping = false;
+    }
+  }
+
+  // Calculate the total cost after shopping
+  let totalCost = calculateTotalCost(selectedProducts);
 
   // Check if the user has enough budget
   if (totalCost > budget) {
-    console.log(`You don't have enough money! Total cost is $${totalCost}`);
+    console.log(`You don't have enough money! Total cost is $${totalCost}.`);
   } else {
     let change = budget - totalCost;
+    console.log(`Total cost: $${totalCost}. Your change: $${change}`);
   }
 }
 
-
 // Example
-let userBudget = 150
-const selectedProducts = [
-  { productIndex: 0, quantity: [1] }, 
-  { productIndex: 1, quantity: [4] }, 
-  { productIndex: 2, quantity: [1] }  
-];
-
-const total = calculateTotalCost(selectedProducts);
-const change = userBudget - total
-console.log(`Total cost: $${total}`);
-console.log(`Your change: $${change}`);
+let userBudget = parseInt(prompt("Enter your budget: "));
+if (!isNaN(userBudget) && userBudget > 0) {
+  shop(userBudget);
+} else {
+  console.log("Invalid budget amount.");
+}
